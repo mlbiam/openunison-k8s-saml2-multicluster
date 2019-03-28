@@ -1,0 +1,94 @@
+<application name="cluster2-new-namespace" azTimeoutMillis="30000" >
+  <urls>
+
+    
+    <url regex="false" authChain="LoginService" overrideHost="false" overrideReferer="false">
+                <host>#[OU_HOST]</host>
+                <filterChain>
+                    <filter class="com.tremolosecurity.scalejs.register.ws.ScaleRegister">
+                        <param name="displayNameAttribute" value="mail"/>
+                        <param name="uidAttributeName" value="uid"/>
+                        <param name="workflowName" value=""/>
+                        <param name="logoutURL" value="/logout"/>
+                        <param name="homeURL" value="/"/>
+                        <param name="frontPage.text" value="Use this page to request the creation of a new namespace.  Once the namespace is approved you will be the first approver and administrator.  You will be notified when the namespace is ready."/>
+                        <param name="frontPage.title" value="Create New Namespace for Cluster 2"/>
+                        <param name="preSetPassword" value="false"/>
+                        <param name="requireReason" value="true"/>
+                        <param name="requireReCaptcha" value="false"/>
+                        <param name="rcSiteKey" value=""/>
+                        <param name="rcSecret" value=""/>
+                        <param name="requireTermsAndConditions" value="false"/>
+                        <param name="termsAndConditionsText" value=""/>
+                        <param name="useCallWorkflowClass" value="true"/>
+                        <param name="callWorkflowClassName" value="com.tremolosecurity.scalejs.K8sProjectCheck"/>
+                        <param name="submitLoggedInUser" value="true"/>
+                        <param name="attributeNames" value="nameSpace"/>
+                        <param name="nameSpace.displayName" value="Namespace Name"/>
+                        <param name="nameSpace.readOnly" value="false"/>
+                        <param name="nameSpace.required" value="true"/>
+                        <param name="nameSpace.regEx" value="^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"/>
+                        <param name="nameSpace.regExFailedMsg" value="Invalid namespace name, must be a valid DNS host name"/>
+                        <param name="nameSpace.minChars" value="0"/>
+                        <param name="nameSpace.maxChars" value="63"/>
+                        <param name="nameSpace.unique" value="false"/>
+                        <param name="nameSpace.type" value="text"/>
+
+                        <param name="callWorkflowInit" value="workflowName=NewK8SNamespace2" />
+                        <param name="callWorkflowInit" value="targetName=k8s2" />
+                        <param name="callWorkflowInit" value="projectAttributeName=nameSpace" />
+                    </filter>
+                </filterChain>
+                <uri>/newproject2/register</uri>
+                <results>
+                    <auSuccess></auSuccess>
+                    <auFail>Default Login Failure</auFail>
+                    <azSuccess></azSuccess>
+                    <azFail>PrivilegedRequest</azFail>
+                </results>
+                <azRules>
+                    <rule scope="dn" constraint="o=Tremolo"/>
+                </azRules>
+            </url>
+
+
+            <url regex="false" authChain="LoginService" overrideHost="false" overrideReferer="false">
+                <host>#[OU_HOST]</host>
+                <filterChain>
+
+                </filterChain>
+                <uri>/newproject2</uri>
+
+                <results>
+                    <auSuccess></auSuccess>
+                    <auFail>Default Login Failure</auFail>
+                    <azSuccess></azSuccess>
+                    <azFail>PrivilegedRequest</azFail>
+                </results>
+                <azRules>
+                    <rule scope="dn" constraint="o=Tremolo"/>
+                </azRules>
+            </url>
+
+            
+
+
+  </urls>
+  <!-- The cookie configuration determines how sessions are managed for this application -->
+  <cookieConfig>
+    <!-- The name of the session cookie for this application.  Applications that want SSO between them should have the same cookie name -->
+      <sessionCookieName>tremolosession</sessionCookieName>
+    <!-- The domain of component of the cookie -->
+    <domain>#[OU_HOST]</domain>
+    <!-- The URL that OpenUnison will interpret as the URL to end the session -->
+    <logoutURI>/logout</logoutURI>
+    <!-- The name of the AES-256 key in the keystore to use to encrypt this session -->
+    <keyAlias>session-unison</keyAlias>
+    <!-- If set to true, the cookie's secure flag is set to true and the browser will only send this cookie over https connections -->
+    <secure>true</secure>
+    <!-- The number of secconds that the session should be allowed to be idle before no longer being valid -->
+    <timeout>#[SESSION_INACTIVITY_TIMEOUT_SECONDS]</timeout>
+    <!-- required but ignored -->
+    <scope>-1</scope>
+  </cookieConfig>
+</application>
